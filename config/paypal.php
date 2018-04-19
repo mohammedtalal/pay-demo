@@ -16,7 +16,7 @@ return [
         # Define your application mode here (LIVE or SANDBOX)
         'mode' => env('PAYPAL_MODE', 'sandbox'),
         // Connection TimeOut
-        'http.ConnectionTimeOut'    =>  9000,
+        'http.ConnectionTimeOut'    =>  3000,
         // Loging information
         'log.LogEnabled'      =>  true,
         'log.FileName'         =>   storage_path()."/logs/paypal.log",

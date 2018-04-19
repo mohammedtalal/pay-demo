@@ -16,6 +16,7 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction; 
 use PayPal\Auth\OAuthTokenCredential;
 use Illuminate\Support\Facades\Session;
+use PayPal\Api\PaymentExecution;
 
 
 class PaypalController extends Controller
@@ -103,12 +104,14 @@ class PaypalController extends Controller
 
     // if user persist buying something this function will execute
     public function status(Request $request) {
-        dd(Session::all());
-        if (empty($request->input('PayerID')) || empty($request->input('token'))) {
+
+        if (empty($request->input('payerID')) || empty($request->input('token'))) {
             die('Payment Failed' );
-            $paymentId = $request->get('paymentId');
-            $execution = PaymentExecution();
-            $execution->setPayerId($request->input('PayerID'));
+        } 
+            $paymentId = request('paymentId');
+            $payment = Payment::get($paymentId, $this->apiContext);
+            $execution = new PaymentExecution();
+            $execution->setPayerId(request('payerID'));
             $result = $payment->execute($execution, $this->apiContext);
 
             if($result->getState() == 'approved'){
@@ -116,7 +119,7 @@ class PaypalController extends Controller
             }
             echo "Failed again";
             die($result);
-        }
+        
     } 
     public function canceled() {
         return "Payment canceled not worries";
